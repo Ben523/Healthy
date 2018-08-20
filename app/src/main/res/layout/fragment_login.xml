@@ -3,7 +3,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="35dp">
+    android:padding="35dp"
+    android:id="@+id/login">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -23,6 +24,7 @@
 
 
             <EditText
+                android:id="@+id/login_user_id"
                 android:drawableLeft="@drawable/ic_person"
                 android:layout_marginTop="15dp"
                 android:hint="@string/user_id"
@@ -30,6 +32,7 @@
                 android:layout_height="wrap_content" />
 
             <EditText
+                android:id="@+id/login_password"
                 android:drawableLeft="@drawable/ic_lock"
                 android:layout_marginTop="15dp"
                 android:hint="@string/password"
@@ -38,6 +41,7 @@
                 android:inputType="textPassword"/>
 
             <Button
+                android:id="@+id/login_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
@@ -45,6 +49,7 @@
                 android:text="@string/login"/>
 
             <TextView
+                android:id="@+id/login_register_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"

@@ -6,6 +6,7 @@
     android:padding="35dp">
 
     <EditText
+        android:id="@+id/bmi-height"
         android:drawableLeft="@drawable/ic_height"
         android:layout_marginTop="15dp"
         android:hint="@string/height"
@@ -13,6 +14,7 @@
         android:layout_height="wrap_content" />
 
     <EditText
+        android:id="@+id/bmi-weight"
         android:drawableLeft="@drawable/ic_weight"
         android:layout_marginTop="15dp"
         android:hint="@string/weight"
@@ -20,6 +22,7 @@
         android:layout_height="wrap_content" />
 
     <Button
+        android:id="@+id/bmi_calculate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
@@ -35,6 +38,7 @@
         android:textSize="18dp"/>
 
     <TextView
+        android:id="@+id/bmi_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
