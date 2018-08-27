@@ -53,7 +53,7 @@ public class LoginFragment extends Fragment{
                     if(savedInstanceState == null){
                         getActivity().getSupportFragmentManager()
                                 .beginTransaction()
-                                .replace(R.id.main_view,new BMIFragment())
+                                .replace(R.id.main_view,new MenuFragment())
                                 .commit();
                     }
                 }

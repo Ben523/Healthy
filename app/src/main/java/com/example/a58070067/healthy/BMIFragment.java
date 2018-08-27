@@ -23,6 +23,8 @@ public class BMIFragment extends Fragment{
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        backBtn();
+        calculateBMI();
     }
 
     private void calculateBMI()
@@ -42,11 +44,27 @@ public class BMIFragment extends Fragment{
                     int weight = Integer.parseInt(weightTxt);
                     float summary = weight/(height*height);
                     TextView value = getView().findViewById(R.id.bmi_value);
-                    value.setText(value.toString());
-                    Toast.makeText(getActivity(),"BMI IS "+ value.toString(), Toast.LENGTH_SHORT).show();
+                    value.setText(Float.toString(summary));
+                    Toast.makeText(getActivity(), Float.toString(summary), Toast.LENGTH_SHORT).show();
+                    Log.d("USER",Float.toString(summary));
                 }
 
 
+            }
+        });
+    }
+
+    private void backBtn()
+    {
+        Button backBtn = getView().findViewById(R.id.bmi_back);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.main_view,new MenuFragment())
+                        .commit();
+                Log.d("USER","GO TO MENU");
             }
         });
     }
