@@ -12,7 +12,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 public class RegisterFragment extends Fragment{
+
+    private FirebaseAuth mAuth;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -22,7 +31,8 @@ public class RegisterFragment extends Fragment{
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        initRegisterBtn(savedInstanceState);
+        mAuth  = FirebaseAuth.getInstance();
+        initRegisterBtn2(savedInstanceState);
 
     }
 
@@ -33,15 +43,13 @@ public class RegisterFragment extends Fragment{
             @Override
             public void onClick(View view) {
                 EditText userID = getView().findViewById(R.id.register_user_id);
-                EditText nameText = getView().findViewById(R.id.register_name);
-                EditText ageText = getView().findViewById(R.id.register_age);
+                EditText ageText = getView().findViewById(R.id.register_re_password);
                 EditText passText = getView().findViewById(R.id.register_password);
                 String username = userID.getText().toString();
-                String name = nameText.getText().toString();
                 String age = ageText.getText().toString();
                 String password = passText.getText().toString();
 
-                if(username.isEmpty() || name.isEmpty() || age.isEmpty() || password.isEmpty()){
+                if(username.isEmpty() ||  password.isEmpty()){
                     Log.d("USER","FIELD NAME IS EMPTY");
                     Toast.makeText(getActivity(), "FIELD NAME IS EMPTY", Toast.LENGTH_SHORT).show();
                 }else if(username.equals("admin")){
@@ -56,6 +64,68 @@ public class RegisterFragment extends Fragment{
                                 .commit();
                     }
                 }
+            }
+        });
+    }
+
+    private void initRegisterBtn2(final Bundle savedInstanceState)
+    {
+        Button registerBtn = getView().findViewById(R.id.register_register_btn);
+        registerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EditText userID = getView().findViewById(R.id.register_user_id);
+                EditText passText = getView().findViewById(R.id.register_password);
+                EditText pass2Text = getView().findViewById(R.id.register_re_password);
+
+                String username = userID.getText().toString();
+                String password = passText.getText().toString();
+                String password2 = pass2Text.getText().toString();
+
+                if(username.isEmpty() ||  password2.isEmpty() || password.isEmpty()){
+                    Log.d("USER","FIELD NAME IS EMPTY");
+                    Toast.makeText(getActivity(), "FIELD NAME IS EMPTY", Toast.LENGTH_SHORT).show();
+                }else if(password.length() < 6 || password2.length() < 6) {
+                    Log.d("USER", "PASSWORD LENGTH LESS THAN 6");
+                    Toast.makeText(getActivity(), "PASSWORD LENGTH LESS THAN 6", Toast.LENGTH_SHORT).show();
+                }else if((password.equals(password2))==false){
+                    Log.d("USER", "PASSWORD DOESNT MAHT");
+                    Toast.makeText(getActivity(), "PASSWORD DOESNT MATCH", Toast.LENGTH_SHORT).show();
+                }else{
+                    Log.d("USER","GO TO LOGIN");
+                    mAuth.createUserWithEmailAndPassword(username, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                        @Override
+                        public void onSuccess(AuthResult authResult) {
+                            sentEmail(authResult.getUser());
+                            if(savedInstanceState == null){
+                                getActivity().getSupportFragmentManager()
+                                        .beginTransaction()
+                                        .replace(R.id.main_view,new BMIFragment())
+                                        .commit();
+                            }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getActivity(), "ERROR :"+e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                }
+            }
+        });
+    }
+
+    private void sentEmail(FirebaseUser _user)
+    {
+        _user.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+
+            }}).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getActivity(), "ERROR :"+e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
