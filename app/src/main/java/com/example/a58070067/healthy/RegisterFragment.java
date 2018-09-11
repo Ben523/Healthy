@@ -100,7 +100,7 @@ public class RegisterFragment extends Fragment{
                             if(savedInstanceState == null){
                                 getActivity().getSupportFragmentManager()
                                         .beginTransaction()
-                                        .replace(R.id.main_view,new BMIFragment())
+                                        .replace(R.id.main_view,new LoginFragment())
                                         .commit();
                             }
                         }
