@@ -12,18 +12,22 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 
 public class MenuFragment extends Fragment{
-
+    private FirebaseAuth mAuth;
     ArrayList<String> menu = new ArrayList<>();
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mAuth = FirebaseAuth.getInstance();
         menu.add("BMI");
         menu.add("Weight");
         menu.add("Setup");
+        menu.add("Sign OUT");
 
         final ArrayAdapter<String> menuAdapter = new ArrayAdapter<>(
                 getActivity(),android.R.layout.simple_list_item_1,menu
@@ -51,6 +55,12 @@ public class MenuFragment extends Fragment{
                             .replace(R.id.main_view,new WeightFragment())
                             .commit();
                             Log.d("USER","GO TO Weight");
+                            break;
+                    case "Sign OUT":mAuth.signOut();
+                        getActivity().getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.main_view,new LoginFragment())
+                                .commit();
                     break;
                     default:break;
 
