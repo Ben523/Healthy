@@ -19,7 +19,7 @@
         android:hint="@string/date"/>
 
     <EditText
-        android:id="@+id/weight_weight_value"
+        android:id="@+id/weight_value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/weight"/>
