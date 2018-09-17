@@ -1,5 +1,6 @@
 package com.example.a58070067.healthy;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -18,10 +20,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
+import java.util.Calendar;
+
 public class WeightFormFragment extends Fragment{
 
     private FirebaseFirestore  mdb;
     private FirebaseAuth mAuth;
+    private Calendar myCalendar;
+    private DatePickerDialog.OnDateSetListener date;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -63,14 +69,18 @@ public class WeightFormFragment extends Fragment{
         addWeight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText date = getView().findViewById(R.id.weight_date);
+                EditText date = getView().findViewById(R.id.weight_date1);
                 EditText weight = getView().findViewById(R.id.weight_value);
 
-                String dateTxt = date.toString();
-                String weightTxt = weight.toString();
+
+                String dateTxt = date.getText().toString();
+                String weightTxt = weight.getText().toString();
+                int weight_value = Integer.parseInt(weightTxt);
                 String user_id = mAuth.getCurrentUser().getUid();
-                Weight weight1 = new Weight(dateTxt,60,"UP");
+                Weight weight1 = new Weight(dateTxt,weight_value,"UP");
+                Log.d("USER",dateTxt);
                 Log.d("USER",weightTxt);
+                Toast.makeText(getActivity(),dateTxt,Toast.LENGTH_SHORT).show();
                 mdb.collection("Healthy").document(user_id)
                         .collection("weight").document(dateTxt).set(weight1)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
