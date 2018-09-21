@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +15,17 @@ import android.widget.ListView;
 
 import com.example.a58070067.healthy.WeightAdapter;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -27,7 +33,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 public class WeightFragment extends Fragment{
-    ArrayList<Weight> weights = new ArrayList<>();
+    private ArrayList<Weight> weights = new ArrayList<>();
     private ListenerRegistration docRef;
     private FirebaseFirestore mdb;
     private FirebaseAuth mAuth;
@@ -43,23 +49,44 @@ public class WeightFragment extends Fragment{
         super.onActivityCreated(savedInstanceState);
         mdb = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setTimestampsInSnapshotsEnabled(true)
+                .build();
+        mdb.setFirestoreSettings(settings);
         String user_id = mAuth.getCurrentUser().getUid();
-        docRef = mdb.collection("myfitness").document(user_id)
-                .collection("weight").addSnapshotListener(new EventListener<QuerySnapshot>() {
+//        docRef = mdb.collection("myfitness").document(user_id)
+//                .collection("weight").addSnapshotListener(new EventListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots,
+//                                        @javax.annotation.Nullable FirebaseFirestoreException e) {
+//                        for(QueryDocumentSnapshot doc:queryDocumentSnapshots){
+//
+//                                weights.add(doc.toObject(Weight.class));
+//                        }
+//                    }
+//                });
+
+        mdb.collection("myfitness").document(user_id).collection("weight")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots,
-                                        @javax.annotation.Nullable FirebaseFirestoreException e) {
-                        for(QueryDocumentSnapshot doc:queryDocumentSnapshots){
-                            if(doc.get("weight") != null){
-                                weights.add(doc.toObject(Weight.class));
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Weight weight = document.toObject(Weight.class);
+                                Log.d("USER",weight.getStatus());
+                                weights.add(weight);
+                                Log.d("USER", document.getId());
                             }
+
+                        } else {
+                            Log.d("USER", "Error getting documents: ", task.getException());
                         }
                     }
-                });
-        addWeightBtn();
-        weights.add(new Weight("01 Jan 2018", 63, "UP"));
-        weights.add(new Weight("02 Jan 2018", 64, "DOWN"));
-        weights.add(new Weight("03 Jan 2018", 63, "UP"));
+               });
+//        weights.add(new Weight("01 Jan 2018", 63, "UP"));
+//        weights.add(new Weight("02 Jan 2018", 64, "DOWN"));
+//        weights.add(new Weight("03 Jan 2018", 63, "UP"));
 
         ListView _weightList = getView().findViewById(R.id.weight_list);
         WeightAdapter weightAdapter = new WeightAdapter(
@@ -68,7 +95,7 @@ public class WeightFragment extends Fragment{
                 weights
         );
         _weightList.setAdapter(weightAdapter);
-
+        addWeightBtn();
 
     }
 

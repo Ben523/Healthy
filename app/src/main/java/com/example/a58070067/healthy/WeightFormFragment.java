@@ -81,7 +81,7 @@ public class WeightFormFragment extends Fragment{
                 Log.d("USER",dateTxt);
                 Log.d("USER",weightTxt);
                 Toast.makeText(getActivity(),dateTxt,Toast.LENGTH_SHORT).show();
-                mdb.collection("Healthy").document(user_id)
+                mdb.collection("myfitness").document(user_id)
                         .collection("weight").document(dateTxt).set(weight1)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
