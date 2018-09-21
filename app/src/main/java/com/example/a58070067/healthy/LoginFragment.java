@@ -57,6 +57,7 @@ public class LoginFragment extends Fragment{
                     Log.d("USER","INVALID USER OR PASSWORD");
                 }else{
                     Log.d("USER","GO TO BMI");
+                    Log.d("USER",username);
                     mAuth.signInWithEmailAndPassword(username,password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                         @Override
                         public void onSuccess(AuthResult authResult) {
