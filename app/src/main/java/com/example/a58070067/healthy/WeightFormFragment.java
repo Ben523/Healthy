@@ -127,7 +127,10 @@ public class WeightFormFragment extends Fragment{
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                Toast.makeText(getActivity(),"SAVE WEIGHT",Toast.LENGTH_SHORT).show();
+                                getActivity().getSupportFragmentManager()
+                                        .beginTransaction()
+                                        .replace(R.id.main_view,new WeightFragment())
+                                        .commit();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override

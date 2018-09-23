@@ -62,10 +62,15 @@ public class LoginFragment extends Fragment{
                         @Override
                         public void onSuccess(AuthResult authResult) {
                             if(savedInstanceState == null){
-                                getActivity().getSupportFragmentManager()
-                                        .beginTransaction()
-                                        .replace(R.id.main_view,new MenuFragment())
-                                        .commit();
+                                if(mAuth.getCurrentUser().isEmailVerified()){
+                                    getActivity().getSupportFragmentManager()
+                                            .beginTransaction()
+                                            .replace(R.id.main_view,new MenuFragment())
+                                            .commit();
+                                }else{
+                                    Toast.makeText(getActivity(), "Pleasse verify your email address then login again", Toast.LENGTH_SHORT).show();
+                                }
+
                             }
                         }
                     }).addOnFailureListener(new OnFailureListener() {
