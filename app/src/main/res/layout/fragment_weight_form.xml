@@ -22,7 +22,8 @@
         android:id="@+id/weight_value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/weight"/>
+        android:hint="@string/weight"
+        android:inputType="number"/>
 
     <Button
         android:id="@+id/weight_save"

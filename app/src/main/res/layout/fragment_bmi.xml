@@ -18,7 +18,8 @@
         android:layout_marginTop="15dp"
         android:hint="@string/height"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:inputType="number"/>
 
     <EditText
         android:id="@+id/bmi-weight"
@@ -26,7 +27,8 @@
         android:layout_marginTop="15dp"
         android:hint="@string/weight"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:inputType="number"/>
 
     <Button
         android:id="@+id/bmi_calculate"
