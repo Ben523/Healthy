@@ -16,10 +16,13 @@ import android.widget.ListView;
 import com.example.a58070067.healthy.WeightAdapter;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -31,9 +34,12 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class WeightFragment extends Fragment{
     private ArrayList<Weight> weights = new ArrayList<>();
+    private ArrayList<String> ids = new ArrayList<>();
     private ListenerRegistration docRef;
     private FirebaseFirestore mdb;
     private FirebaseAuth mAuth;
@@ -54,39 +60,16 @@ public class WeightFragment extends Fragment{
                 .build();
         mdb.setFirestoreSettings(settings);
         String user_id = mAuth.getCurrentUser().getUid();
-//        docRef = mdb.collection("myfitness").document(user_id)
-//                .collection("weight").addSnapshotListener(new EventListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots,
-//                                        @javax.annotation.Nullable FirebaseFirestoreException e) {
-//                        for(QueryDocumentSnapshot doc:queryDocumentSnapshots){
-//
-//                                weights.add(doc.toObject(Weight.class));
-//                        }
-//                    }
-//                });
-
-        mdb.collection("myfitness").document(user_id).collection("weight")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Weight weight = document.toObject(Weight.class);
-                                Log.d("USER",weight.getStatus());
-                                weights.add(weight);
-                                Log.d("USER", document.getId());
-                            }
-
-                        } else {
-                            Log.d("USER", "Error getting documents: ", task.getException());
-                        }
-                    }
-               });
-//        weights.add(new Weight("01 Jan 2018", 63, "UP"));
-//        weights.add(new Weight("02 Jan 2018", 64, "DOWN"));
-//        weights.add(new Weight("03 Jan 2018", 63, "UP"));
+        getListItems(user_id);
+        Collections.reverse(weights);
+        if(weights.isEmpty())
+        {
+            Log.d("USER","EMPTY");
+        }
+        else
+        {
+            Log.d("USER","FULL");
+        }
 
         ListView _weightList = getView().findViewById(R.id.weight_list);
         WeightAdapter weightAdapter = new WeightAdapter(
@@ -109,6 +92,40 @@ public class WeightFragment extends Fragment{
                         .beginTransaction()
                         .replace(R.id.main_view,new WeightFormFragment())
                         .commit();
+            }
+        });
+    }
+
+    private void getListItems(String user_id) {
+        mdb.collection("myfitness").document(user_id).collection("weight").get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot documentSnapshots) {
+                        if (documentSnapshots.isEmpty()) {
+                            Log.d("user", "onSuccess: LIST EMPTY");
+                            return;
+                        } else {
+                            // Convert the whole Query Snapshot to a list
+                            // of objects directly! No need to fetch each
+                            // document.
+                            List<Weight> types = documentSnapshots.toObjects(Weight.class);
+
+                            // Add all to your list
+                            weights.addAll(types);
+                            Log.d("USER", "onSuccess: " + weights);
+                            ListView _weightList = getView().findViewById(R.id.weight_list);
+                            WeightAdapter weightAdapter = new WeightAdapter(
+                                    getActivity(),
+                                    R.layout.fragment_custom_listview,
+                                    weights
+                            );
+                            _weightList.setAdapter(weightAdapter);
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
             }
         });
     }

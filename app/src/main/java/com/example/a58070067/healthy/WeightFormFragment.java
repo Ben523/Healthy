@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -19,11 +20,17 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 public class WeightFormFragment extends Fragment{
-
+    private ArrayList<Weight> weights = new ArrayList<>();
     private FirebaseFirestore  mdb;
     private FirebaseAuth mAuth;
     private Calendar myCalendar;
@@ -43,6 +50,9 @@ public class WeightFormFragment extends Fragment{
                 .setTimestampsInSnapshotsEnabled(true)
                 .build();
         mdb.setFirestoreSettings(settings);
+        String user_id = mAuth.getCurrentUser().getUid();
+        getListItems(user_id);
+
         saveWeight();
         backBtn();
     }
@@ -76,12 +86,43 @@ public class WeightFormFragment extends Fragment{
                 String dateTxt = date.getText().toString();
                 String weightTxt = weight.getText().toString();
                 int weight_value = Integer.parseInt(weightTxt);
-                String user_id = mAuth.getCurrentUser().getUid();
-                Weight weight1 = new Weight(dateTxt,weight_value,"UP");
+                String userId = mAuth.getCurrentUser().getUid();
+                Weight last_record;
+                if(!weights.isEmpty()) {
+                    last_record = weights.get(weights.size() - 1);
+                }
+                else
+                {
+                    last_record = new Weight();
+                }
+                if(weights.isEmpty())
+                {
+                    Log.d("USER","EMPTY");
+                    Log.d("USER",userId);
+                }
+                else
+                {
+                    Log.d("USER","FULL");
+                    Log.d("USER",userId);
+                }
+                String status = "";
+                if((weight_value > last_record.getWeight())&&(!weights.isEmpty()))
+                {
+                    status = "UP";
+                }
+                else if(weight_value < last_record.getWeight())
+                {
+                    status = "DOWN";
+                }
+                else
+                {
+                    status = "";
+                }
+
+                Weight weight1 = new Weight(dateTxt,weight_value,status);
                 Log.d("USER",dateTxt);
                 Log.d("USER",weightTxt);
-                Toast.makeText(getActivity(),dateTxt,Toast.LENGTH_SHORT).show();
-                mdb.collection("myfitness").document(user_id)
+                mdb.collection("myfitness").document(userId)
                         .collection("weight").document(dateTxt).set(weight1)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
@@ -98,4 +139,33 @@ public class WeightFormFragment extends Fragment{
             }
         });
     }
+
+    private void getListItems(String user_id) {
+        mdb.collection("myfitness").document(user_id).collection("weight").get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot documentSnapshots) {
+                        if (documentSnapshots.isEmpty()) {
+                            Log.d("user", "onSuccess: LIST EMPTY");
+                            return;
+                        } else {
+                            // Convert the whole Query Snapshot to a list
+                            // of objects directly! No need to fetch each
+                            // document.
+                            List<Weight> types = documentSnapshots.toObjects(Weight.class);
+
+                            // Add all to your list
+                            weights.addAll(types);
+                            Log.d("USER", "onSuccess: " + weights);
+
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+    }
+
 }

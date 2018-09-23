@@ -34,12 +34,14 @@ public class WeightAdapter extends ArrayAdapter<Weight>  {
                 parent,
                 false);
 
-        TextView _date = _weightItem.findViewById(R.id.textView1);
-        TextView _weight = _weightItem.findViewById(R.id.textView2);
+        TextView _date = _weightItem.findViewById(R.id.custom_date);
+        TextView _weight = _weightItem.findViewById(R.id.custom_weight);
+        TextView _status = _weightItem.findViewById(R.id.custom_status);
 
         Weight _row = weights.get(position);
         _date.setText(_row.getDate());
         _weight.setText(String.valueOf( _row.getWeight() ));
+        _status.setText(_row.getStatus());
 
         return _weightItem;
     }
