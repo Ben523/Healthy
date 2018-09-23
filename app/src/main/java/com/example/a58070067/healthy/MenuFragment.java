@@ -26,7 +26,6 @@ public class MenuFragment extends Fragment{
         mAuth = FirebaseAuth.getInstance();
         menu.add("BMI");
         menu.add("Weight");
-        menu.add("Setup");
         menu.add("Sign OUT");
 
         final ArrayAdapter<String> menuAdapter = new ArrayAdapter<>(

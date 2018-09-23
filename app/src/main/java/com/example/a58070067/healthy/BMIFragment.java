@@ -40,13 +40,13 @@ public class BMIFragment extends Fragment{
                 if(heightTxt.isEmpty()||weightTxt.isEmpty()){
                     Log.d("USER","FIELD NAME IS EMPTY");
                 }else{
-                    float height = Float.parseFloat(heightTxt);
+                    int height = Integer.parseInt(heightTxt);
                     int weight = Integer.parseInt(weightTxt);
-                    float summary = weight/(height*height);
+                    Double summary = weight/((height*0.01)*(height*0.01));
                     TextView value = getView().findViewById(R.id.bmi_value);
-                    value.setText(Float.toString(summary));
-                    Toast.makeText(getActivity(), Float.toString(summary), Toast.LENGTH_SHORT).show();
-                    Log.d("USER",Float.toString(summary));
+                    value.setText(Double.toString(summary));
+                    Toast.makeText(getActivity(), Double.toString(summary), Toast.LENGTH_SHORT).show();
+                    Log.d("USER",Double.toString(summary));
                 }
 
 

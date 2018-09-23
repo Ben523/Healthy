@@ -11,6 +11,12 @@
         android:layout_height="wrap_content"
         android:text="@string/add_weight"/>
 
+    <Button
+        android:id="@+id/weight_back"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/back"/>
+
     <ListView
         android:id="@+id/weight_list"
         android:layout_width="match_parent"

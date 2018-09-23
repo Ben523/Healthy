@@ -61,15 +61,6 @@ public class WeightFragment extends Fragment{
         mdb.setFirestoreSettings(settings);
         String user_id = mAuth.getCurrentUser().getUid();
         getListItems(user_id);
-        Collections.reverse(weights);
-        if(weights.isEmpty())
-        {
-            Log.d("USER","EMPTY");
-        }
-        else
-        {
-            Log.d("USER","FULL");
-        }
 
         ListView _weightList = getView().findViewById(R.id.weight_list);
         WeightAdapter weightAdapter = new WeightAdapter(
@@ -79,6 +70,7 @@ public class WeightFragment extends Fragment{
         );
         _weightList.setAdapter(weightAdapter);
         addWeightBtn();
+        backBtn();
 
     }
 
@@ -91,6 +83,20 @@ public class WeightFragment extends Fragment{
                 getActivity().getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.main_view,new WeightFormFragment())
+                        .commit();
+            }
+        });
+    }
+
+    private void backBtn()
+    {
+        Button back = getView().findViewById(R.id.weight_back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.main_view,new MenuFragment())
                         .commit();
             }
         });
@@ -112,6 +118,7 @@ public class WeightFragment extends Fragment{
 
                             // Add all to your list
                             weights.addAll(types);
+                            Collections.reverse(weights);
                             Log.d("USER", "onSuccess: " + weights);
                             ListView _weightList = getView().findViewById(R.id.weight_list);
                             WeightAdapter weightAdapter = new WeightAdapter(
