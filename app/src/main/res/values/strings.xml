@@ -14,6 +14,6 @@
     <string name="back">BACK</string>
     <string name="add_weight">Add Weight</string>
     <string name="save">SAVE</string>
-    <string name="date">DATE</string>
+    <string name="date">DATE(day month year)</string>
     <string name="re_password">re password</string>
 </resources>
