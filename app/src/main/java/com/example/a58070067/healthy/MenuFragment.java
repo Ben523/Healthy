@@ -27,6 +27,7 @@ public class MenuFragment extends Fragment{
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         //SQLiteDatabase myDB = openOrCreateDatabase("my.db",null,MODE_PRIVATE);
+
         mAuth = FirebaseAuth.getInstance();
         menu.add("BMI");
         menu.add("Weight");

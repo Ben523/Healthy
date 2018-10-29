@@ -10,7 +10,10 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.text.ParseException;
+import java.time.Duration;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
 import java.text.SimpleDateFormat;
@@ -45,16 +48,17 @@ public class SleepAdapter extends ArrayAdapter<Sleep> {
         Sleep _row = sleeps.get(position);
         _date.setText(_row.getDate());
         _sleep_time.setText(String.valueOf( _row.getSleep_time() )+" - "+String.valueOf(_row.getWake_up_time()));
-        //_wake_up_time.setText(String.valueOf(_row.getWake_up_time()));
-        String sleep_t = String.valueOf(_row.getSleep_time());
-        String time1 = "12:00";
-        String time2 = "14:00";
+        String time1 = String.valueOf( _row.getSleep_time() );
+        String time2 = String.valueOf(_row.getWake_up_time());
         SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+
 
         try {
             Date date1 = format.parse(time1);
             Date date2 = format.parse(time2);
-            long difference = date2.getTime() - date1.getTime();
+            long difference = (date2.getTime()/ (60 * 60 * 1000)) ;
+            long diffMinutes = difference / (60 * 1000) % 60;
+            long diffHours = difference / (60 * 60 * 1000) % 24;
             _wake_up_time.setText(Long.toString(difference));
         } catch (ParseException e) {
         }

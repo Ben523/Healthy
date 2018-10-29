@@ -1,5 +1,6 @@
 package com.example.a58070067.healthy;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,10 +11,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 
-public class SleepFragment extends Fragment {
-    private ArrayList<Weight> sleeps = new ArrayList<>();
+import static android.content.Context.MODE_PRIVATE;
+import static android.database.sqlite.SQLiteDatabase.openOrCreateDatabase;
+
+public class SleepFragment extends Fragment{
+    private ArrayList<Sleep> sleeps = new ArrayList<>();
+    private DBHelper mHelper;
+    private FirebaseAuth mAuth;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -24,8 +32,13 @@ public class SleepFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        mHelper = new DBHelper(getActivity());
+        mAuth = FirebaseAuth.getInstance();
+        String user_id = mAuth.getCurrentUser().getUid();
+        sleeps = mHelper.getFriendList(user_id);
+
         ListView _sleepList = getView().findViewById(R.id.sleep_list);
-        WeightAdapter sleepAdapter = new WeightAdapter(
+        SleepAdapter sleepAdapter = new SleepAdapter(
                 getActivity(),
                 R.layout.fragment_custom_listview,
                 sleeps
