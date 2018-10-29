@@ -10,11 +10,18 @@ public class DBHelper extends SQLiteOpenHelper {
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
+        String CREATE_SLEEP_TABLE = "CREATE TABLE sleep ( id TEXT PRIMARY KEY AUTOINCREMENT, " +
+                "sleep_time TEXT, wake_up_time TEXT)";
 
+        db.execSQL(CREATE_SLEEP_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        String DROP_SLEEP_TABLE = "DROP TABLE IF EXISTS sleep";
 
+        db.execSQL(DROP_SLEEP_TABLE);
+
+        onCreate(db);
     }
 }
