@@ -16,4 +16,6 @@
     <string name="save">SAVE</string>
     <string name="date">DATE(day month year)</string>
     <string name="re_password">re password</string>
+    <string name="add_sleep">Add Sleep</string>
+    <string name="time">Time (HH:MM)</string>
 </resources>

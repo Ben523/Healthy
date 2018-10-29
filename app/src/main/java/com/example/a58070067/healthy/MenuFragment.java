@@ -1,5 +1,6 @@
 package com.example.a58070067.healthy;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,6 +17,8 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class MenuFragment extends Fragment{
     private FirebaseAuth mAuth;
     ArrayList<String> menu = new ArrayList<>();
@@ -23,9 +26,11 @@ public class MenuFragment extends Fragment{
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        //SQLiteDatabase myDB = openOrCreateDatabase("my.db",null,MODE_PRIVATE);
         mAuth = FirebaseAuth.getInstance();
         menu.add("BMI");
         menu.add("Weight");
+        menu.add("sleep");
         menu.add("Sign OUT");
 
         final ArrayAdapter<String> menuAdapter = new ArrayAdapter<>(
@@ -55,6 +60,13 @@ public class MenuFragment extends Fragment{
                             .commit();
                             Log.d("USER","GO TO Weight");
                             break;
+                    case "sleep":getActivity().getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.main_view,new SleepFragment())
+                            .commit();
+                        Log.d("USER","GO TO Weight");
+                        break;
+
                     case "Sign OUT":mAuth.signOut();
                         getActivity().getSupportFragmentManager()
                                 .beginTransaction()
