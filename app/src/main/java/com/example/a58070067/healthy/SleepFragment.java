@@ -8,8 +8,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -22,6 +26,7 @@ public class SleepFragment extends Fragment{
     private ArrayList<Sleep> sleeps = new ArrayList<>();
     private DBHelper mHelper;
     private FirebaseAuth mAuth;
+    private String user_id;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -34,7 +39,7 @@ public class SleepFragment extends Fragment{
 
         mHelper = new DBHelper(getActivity());
         mAuth = FirebaseAuth.getInstance();
-        String user_id = mAuth.getCurrentUser().getUid();
+        user_id = mAuth.getCurrentUser().getUid();
         sleeps = mHelper.getFriendList(user_id);
 
         ListView _sleepList = getView().findViewById(R.id.sleep_list);
@@ -43,7 +48,20 @@ public class SleepFragment extends Fragment{
                 R.layout.fragment_custom_listview,
                 sleeps
         );
+
+        _sleepList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TextView datetxt = (TextView) view.findViewById(R.id.custom_date);
+                String date = datetxt.getText().toString();
+                TextView timetxt = (TextView) view.findViewById(R.id.custom_weight);
+                String time = timetxt.getText().toString();
+                editSleepTime(date,user_id,time);
+            }
+        });
         _sleepList.setAdapter(sleepAdapter);
+
+
         addSleepBtn();
 
     }
@@ -60,6 +78,22 @@ public class SleepFragment extends Fragment{
                         .commit();
             }
         });
+    }
+
+    private void editSleepTime(final String datetxt,final String user,final String timetxt)
+    {
+                Bundle bundle = new Bundle();
+                bundle.putString("date", datetxt);
+                bundle.putString("user_id",user);
+                bundle.putString("times",timetxt);
+                SleepUpdateFormFragment sleepUpdate = new SleepUpdateFormFragment();
+                sleepUpdate.setArguments(bundle);
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.main_view,sleepUpdate)
+                        .commit();
+
+
     }
 
     private void backBtn()

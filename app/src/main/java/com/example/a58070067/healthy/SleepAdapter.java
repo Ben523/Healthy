@@ -1,13 +1,20 @@
 package com.example.a58070067.healthy;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.ParseException;
 import java.time.Duration;
@@ -23,6 +30,10 @@ import java.util.Locale;
 public class SleepAdapter extends ArrayAdapter<Sleep> {
     List<Sleep> sleeps = new ArrayList<Sleep>();
     Context context;
+    private String date;
+    private String sleepTime;
+    private String wakeupTime;
+    private View view;
 
     public SleepAdapter(Context context, int resouce, List<Sleep> objects){
         super(context, resouce, objects);
@@ -40,23 +51,29 @@ public class SleepAdapter extends ArrayAdapter<Sleep> {
                 R.layout.fragment_custom_listview,
                 parent,
                 false);
-
+        view = _weightItem;
         TextView _date = _weightItem.findViewById(R.id.custom_date);
         TextView _sleep_time = _weightItem.findViewById(R.id.custom_weight);
         TextView _wake_up_time = _weightItem.findViewById(R.id.custom_status);
 
+
+
         Sleep _row = sleeps.get(position);
         _date.setText(_row.getDate());
+        date = _row.getDate();
+        sleepTime = String.valueOf( _row.getSleep_time() );
+        wakeupTime = String.valueOf(_row.getWake_up_time());
         _sleep_time.setText(String.valueOf( _row.getSleep_time() )+" - "+String.valueOf(_row.getWake_up_time()));
         String time1 = String.valueOf( _row.getSleep_time() );
         String time2 = String.valueOf(_row.getWake_up_time());
         SimpleDateFormat format = new SimpleDateFormat("HH:mm");
 
 
+
         try {
             Date date1 = format.parse(time1);
             Date date2 = format.parse(time2);
-            long difference = (date2.getTime()/ (60 * 60 * 1000)) ;
+            long difference = (date1.getTime()/ (60 * 60 * 1000))-(date2.getTime()/ (60 * 60 * 1000));
             long diffMinutes = difference / (60 * 1000) % 60;
             long diffHours = difference / (60 * 60 * 1000) % 24;
             _wake_up_time.setText(Long.toString(difference));
@@ -64,6 +81,12 @@ public class SleepAdapter extends ArrayAdapter<Sleep> {
         }
 
 
+
+
+
+
         return _weightItem;
     }
+
+
 }
