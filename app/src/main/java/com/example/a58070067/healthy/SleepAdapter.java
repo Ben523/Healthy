@@ -64,21 +64,43 @@ public class SleepAdapter extends ArrayAdapter<Sleep> {
         sleepTime = String.valueOf( _row.getSleep_time() );
         wakeupTime = String.valueOf(_row.getWake_up_time());
         _sleep_time.setText(String.valueOf( _row.getSleep_time() )+" - "+String.valueOf(_row.getWake_up_time()));
-        String time1 = String.valueOf( _row.getSleep_time() );
+        String time1 = String.valueOf(_row.getSleep_time());
         String time2 = String.valueOf(_row.getWake_up_time());
         SimpleDateFormat format = new SimpleDateFormat("HH:mm");
 
 
 
-        try {
-            Date date1 = format.parse(time1);
-            Date date2 = format.parse(time2);
-            long difference = (date1.getTime()/ (60 * 60 * 1000))-(date2.getTime()/ (60 * 60 * 1000));
-            long diffMinutes = difference / (60 * 1000) % 60;
-            long diffHours = difference / (60 * 60 * 1000) % 24;
-            _wake_up_time.setText(Long.toString(difference));
-        } catch (ParseException e) {
-        }
+
+//            Date date1 = format.parse(time1);
+//            Date date2 = format.parse(time2);
+//            long difference = (date1.getTime()/ (60 * 60 * 1000))-(date2.getTime()/ (60 * 60 * 1000));
+//            long diffMinutes = difference / (60 * 1000) % 60;
+//            long diffHours = difference / (60 * 60 * 1000) % 24;
+
+            String[] fractions1=time1.split(":");
+            String[] fractions2=time2.split(":");
+            fractions1[0] = fractions1[0].replaceAll("\\s+","");
+            fractions1[1] = fractions1[1].replaceAll("\\s+","");
+            fractions2[0] = fractions2[0].replaceAll("\\s+","");
+            fractions2[1] = fractions2[1].replaceAll("\\s+","");
+            int hours1=Integer.parseInt(fractions1[0]);
+            int hours2=Integer.parseInt(fractions2[0]);
+            int minutes1=Integer.parseInt(fractions1[1]);
+            int minutes2=Integer.parseInt(fractions2[1]);
+            if(hours1>12)
+            {
+                hours1 = 24%hours1;
+            }
+            int hourDiff=hours1+hours2;
+            int minutesDiff=minutes1-minutes2;
+            if (minutesDiff < 0) {
+                minutesDiff = 60 + minutesDiff;
+                hourDiff--;
+            }
+            if (hourDiff < 0) {
+                hourDiff = 24 + hourDiff ;
+            }
+            _wake_up_time.setText( hourDiff + ":" + minutesDiff);
 
 
 

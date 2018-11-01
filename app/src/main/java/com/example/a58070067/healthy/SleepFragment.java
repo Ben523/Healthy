@@ -63,7 +63,7 @@ public class SleepFragment extends Fragment{
 
 
         addSleepBtn();
-
+        backBtn();
     }
 
     private void addSleepBtn()
