@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import static android.content.Context.MODE_PRIVATE;
 import static android.database.sqlite.SQLiteDatabase.openOrCreateDatabase;
@@ -41,7 +42,7 @@ public class SleepFragment extends Fragment{
         mAuth = FirebaseAuth.getInstance();
         user_id = mAuth.getCurrentUser().getUid();
         sleeps = mHelper.getFriendList(user_id);
-
+        Collections.reverse(sleeps);
         ListView _sleepList = getView().findViewById(R.id.sleep_list);
         SleepAdapter sleepAdapter = new SleepAdapter(
                 getActivity(),

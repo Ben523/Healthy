@@ -100,7 +100,15 @@ public class SleepAdapter extends ArrayAdapter<Sleep> {
             if (hourDiff < 0) {
                 hourDiff = 24 + hourDiff ;
             }
-            _wake_up_time.setText( hourDiff + ":" + minutesDiff);
+            if(minutesDiff < 10)
+            {
+                _wake_up_time.setText( hourDiff + ":0" + minutesDiff);
+            }
+            else
+            {
+                _wake_up_time.setText( hourDiff + ":" + minutesDiff);
+            }
+
 
 
 
