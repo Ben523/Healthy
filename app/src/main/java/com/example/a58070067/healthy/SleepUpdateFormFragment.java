@@ -87,6 +87,10 @@ public class SleepUpdateFormFragment extends Fragment{
                     Sleep sleep = new Sleep(dateTxt,sleep_time_txt,wake_up_time_txt);
                     mHelper.updateSleep(sleep,user_id);
                     Toast.makeText(getActivity(),"SAVED TIME"+sleep.getDate(),Toast.LENGTH_SHORT).show();
+                    getActivity().getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.main_view,new SleepFragment())
+                            .commit();
                 }
 
             }
