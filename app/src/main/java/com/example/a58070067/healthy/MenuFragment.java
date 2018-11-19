@@ -32,6 +32,7 @@ public class MenuFragment extends Fragment{
         menu.add("BMI");
         menu.add("Weight");
         menu.add("sleep");
+        menu.add("Post");
         menu.add("Sign OUT");
 
         final ArrayAdapter<String> menuAdapter = new ArrayAdapter<>(
@@ -62,6 +63,12 @@ public class MenuFragment extends Fragment{
                             Log.d("USER","GO TO Weight");
                             break;
                     case "sleep":getActivity().getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.main_view,new SleepFragment())
+                            .commit();
+                        Log.d("USER","GO TO Weight");
+                        break;
+                    case "Post":getActivity().getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.main_view,new SleepFragment())
                             .commit();
