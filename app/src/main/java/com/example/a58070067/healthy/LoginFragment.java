@@ -61,7 +61,7 @@ public class LoginFragment extends Fragment{
                     mAuth.signInWithEmailAndPassword(username,password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                         @Override
                         public void onSuccess(AuthResult authResult) {
-                            if(savedInstanceState == null){
+
                                 if(mAuth.getCurrentUser().isEmailVerified()){
                                     getActivity().getSupportFragmentManager()
                                             .beginTransaction()
@@ -71,7 +71,7 @@ public class LoginFragment extends Fragment{
                                     Toast.makeText(getActivity(), "Pleasse verify your email address then login again", Toast.LENGTH_SHORT).show();
                                 }
 
-                            }
+
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override

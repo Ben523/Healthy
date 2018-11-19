@@ -16,7 +16,7 @@
             android:padding="20dp">
 
             <Button
-                android:id="@+id/post_back"
+                android:id="@+id/comment_back"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/back"/>
@@ -41,7 +41,7 @@
             android:padding="35dp">
 
             <ListView
-                android:id="@+id/frg_post_list"
+                android:id="@+id/frg_comment_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:divider="@android:color/transparent"
@@ -52,6 +52,5 @@
         </LinearLayout>
 
     </ScrollView>
-
 
 </android.support.constraint.ConstraintLayout>

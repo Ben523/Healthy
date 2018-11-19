@@ -70,7 +70,7 @@ public class MenuFragment extends Fragment{
                         break;
                     case "Post":getActivity().getSupportFragmentManager()
                             .beginTransaction()
-                            .replace(R.id.main_view,new SleepFragment())
+                            .replace(R.id.main_view,new PostFragment())
                             .commit();
                         Log.d("USER","GO TO Weight");
                         break;
